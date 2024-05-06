@@ -9,11 +9,13 @@ public class Projectile : MonoBehaviour
     
     virtual public void Update()
     {
+        //Constantemente estoy chequeando los limites
         CheckLimits();
     }
 
     internal virtual void OnCollisionEnter(Collision collision)
     {
+        //Si el proyectil entra en colisión con algo con el tag de Wall o Floor es destruido
         if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Floor"))
         {
             Destroy(this.gameObject);
@@ -22,6 +24,7 @@ public class Projectile : MonoBehaviour
 
     internal virtual void CheckLimits()
     {
+        //Si el proyectil supera cualquiera de los limites es destruido
         if (this.transform.position.x > xLimit)
         {
             Destroy(this.gameObject);

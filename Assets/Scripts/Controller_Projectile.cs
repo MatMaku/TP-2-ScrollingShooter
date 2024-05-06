@@ -17,6 +17,7 @@ public class Controller_Projectile : Projectile
     
     public override void Update()
     {
+        //Hago que el proyectil vaya hacia adelante
         ProjectileDirection();
         base.Update();
     }

@@ -27,12 +27,14 @@ public class Controller_Hud : MonoBehaviour
 
     void Update()
     {
+        //Si el gameOver es true significa que el jugador perdio y se activa el texto de game over en la pantalla
         if (gameOver)
         {
             Time.timeScale = 0;
             gameOverText.text = "Game Over" ;
             gameOverText.gameObject.SetActive(true);
         }
+        //En este if actualizo el texto del power up para indicar cual power up posee el jugador siempre que el jugador exista
         if (player!=null)
         {
             if (player.powerUpCount <= 0)

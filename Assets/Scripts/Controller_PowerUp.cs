@@ -13,6 +13,7 @@ public class Controller_PowerUp : Projectile
 
     private void FixedUpdate()
     {
+        //Hace que se mueva lentamente hacia la izquierda
         rb.velocity = new Vector3(-0.7f,0,0);
     }
 }

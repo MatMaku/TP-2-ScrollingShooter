@@ -27,6 +27,7 @@ public class Controller_Missile : Projectile
 
     public override void Update()
     {
+        //Aca hacemos que el proyectil siempre este mirando al frente cuando esta en el aire y que cuando colisione tome la rotación de esa colisión 
         if (Physics.Raycast(transform.position,Vector3.right, out hit, 3))
         {
             Debug.DrawRay(transform.position, Vector3.right * hit.distance, Color.yellow);
@@ -45,6 +46,7 @@ public class Controller_Missile : Projectile
 
     void FixedUpdate()
     {
+        //Le pongo una fuerza diferente al misil segun con que este en contacto
         if (wallColliding)
         {
             rb.AddForce(wallForce);
@@ -66,6 +68,7 @@ public class Controller_Missile : Projectile
 
     internal override void OnCollisionEnter(Collision collision)
     {
+        //Defino floorColiding true si esta en colisión con el piso y defino una fuerza normal
         if (collision.gameObject.CompareTag("Floor"))
         {
             floorColiding = true;
@@ -75,6 +78,7 @@ public class Controller_Missile : Projectile
 
     private void OnCollisionExit(Collision collision)
     {
+        //Defino floorColiding false si se salio de colisión con el piso y defino una fuerza normal
         if (collision.gameObject.CompareTag("Floor"))
         {
             floorColiding = false;

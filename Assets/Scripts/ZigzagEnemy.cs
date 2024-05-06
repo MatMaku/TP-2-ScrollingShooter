@@ -15,6 +15,7 @@ public class ZigzagEnemy : Controller_Enemy
 
     void FixedUpdate()
     {
+        //Dependiendode goingUp viaja en diagonal hacia arriba o hacia abajo
         if (goingUp)
         {
             rb.AddForce(new Vector3(-1, 1, 0) * enemySpeed);
@@ -27,6 +28,7 @@ public class ZigzagEnemy : Controller_Enemy
 
     internal override void OnCollisionEnter(Collision collision)
     {
+        //Cuando colisiona con el techo o el piso cambia el estado de goingUp
         if (collision.gameObject.CompareTag("Floor"))
         {
             goingUp = true;

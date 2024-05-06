@@ -17,7 +17,7 @@ public class Controller_Instantiator : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -39,6 +39,9 @@ public class Controller_Instantiator : MonoBehaviour
 
     private void SpawnEnemies()
     {
+        //Cada ves que el timer llega a 0 elijo un enemigo aleatorio de la lista de enemigos
+        //Luego tomo un offset de X que es la posición del instanciador
+        //Despues creo 5 versiones del enemigo seleccionado de la lista con una diferencia de 4 en X entre cada uno
         if (timer <= 0)
         {
             float offsetX = instantiatePos.transform.position.x;

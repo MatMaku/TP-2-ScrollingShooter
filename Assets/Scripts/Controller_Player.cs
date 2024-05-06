@@ -14,12 +14,12 @@ public class Controller_Player : MonoBehaviour
     public GameObject missileProjectile;
     public GameObject laserProjectile;
     public GameObject option;
-    public int powerUpCount=0;
+    public int powerUpCount = 0;
 
     internal bool doubleShoot;
     internal bool missiles;
     internal float missileCount;
-    internal float shootingCount=0;
+    internal float shootingCount = 0.25f;
     internal bool forceField;
     internal bool laserOn;
 
@@ -32,10 +32,10 @@ public class Controller_Player : MonoBehaviour
 
     internal GameObject laser;
 
-    private List<Controller_Option> options;
-    
+    internal List<Controller_Option> options;
+
     public static Controller_Player _Player;
-    
+
     private void Awake()
     {
         if (_Player == null)
@@ -78,6 +78,7 @@ public class Controller_Player : MonoBehaviour
 
     private void CheckForceField()
     {
+        //Segun el estado del escudo pone de un color u otro al jugador para indicar su estado
         if (forceField)
         {
             render.material.color = Color.blue;
@@ -95,29 +96,34 @@ public class Controller_Player : MonoBehaviour
 
     public virtual void ActionInput()
     {
+        //Con estos contadores definimos la velocidad a la que se va a disparar
         missileCount -= Time.deltaTime;
         shootingCount -= Time.deltaTime;
-        if (Input.GetKey(KeyCode.O) && shootingCount<0)
+        if (Input.GetKey(KeyCode.O) && shootingCount < 0)
         {
-            if (OnShooting!=null)
+            if (OnShooting != null)
             {
                 OnShooting();
             }
 
+            //Si el laser esta activado se crea el laser como proyectil
             if (laserOn)
             {
                 laser = Instantiate(laserProjectile, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
                 laser.GetComponent<Controller_Laser>().parent = this.gameObject;
-                //laser.GetComponent<Controller_Laser>().relase = false;
+                laser.GetComponent<Controller_Laser>().relase = false;
             }
             else
             {
+                //Sino se crean proyectiles normales
                 Instantiate(projectile, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+                //Si los proyectiles dobles estan activados los crea y pone dirección segun lastKeyUp
                 if (doubleShoot)
                 {
                     doubleProjectile.GetComponent<Controller_Projectile_Double>().directionUp = lastKeyUp;
                     Instantiate(doubleProjectile, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
                 }
+                //Si los misiles estan activados los crea
                 if (missiles)
                 {
                     if (missileCount < 0)
@@ -131,7 +137,7 @@ public class Controller_Player : MonoBehaviour
             {
                 laser.GetComponent<Controller_Laser>().relase = false;
             }
-            shootingCount = 0.1f;
+            shootingCount = 0.25f;
         }
         else
         {
@@ -142,6 +148,7 @@ public class Controller_Player : MonoBehaviour
             }
         }
 
+        //Cuando presiones la P segun el contador powerUpCount vamos a activar el efecto del power up correspondiente
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (powerUpCount == 1)
@@ -149,7 +156,7 @@ public class Controller_Player : MonoBehaviour
                 speed *= 2;
                 powerUpCount = 0;
             }
-            else if(powerUpCount == 2)
+            else if (powerUpCount == 2)
             {
                 if (!missiles)
                 {
@@ -187,20 +194,21 @@ public class Controller_Player : MonoBehaviour
 
     private void OptionListing()
     {
-        GameObject op=null;
+        //Se crean las naves adicionales Option hasta 4
+        GameObject op = null;
         if (options.Count == 0)
         {
-            op = Instantiate(option, new Vector3(transform.position.x-1, transform.position.y-2, transform.position.z), Quaternion.identity);
+            op = Instantiate(option, new Vector3(transform.position.x - 1, transform.position.y - 2, transform.position.z), Quaternion.identity);
             options.Add(op.GetComponent<Controller_Option>());
             powerUpCount = 0;
         }
-        else if(options.Count == 1)
+        else if (options.Count == 1)
         {
             op = Instantiate(option, new Vector3(transform.position.x - 1, transform.position.y + 2, transform.position.z), Quaternion.identity);
             options.Add(op.GetComponent<Controller_Option>());
             powerUpCount = 0;
         }
-        else if(options.Count == 2)
+        else if (options.Count == 2)
         {
             op = Instantiate(option, new Vector3(transform.position.x - 1.5f, transform.position.y - 4, transform.position.z), Quaternion.identity);
             options.Add(op.GetComponent<Controller_Option>());
@@ -216,14 +224,18 @@ public class Controller_Player : MonoBehaviour
 
     private void Movement()
     {
+        //Muevo al jugador tomando los imputs por defecto de unity y suando la velocidad guardado en speed
         float inputX = Input.GetAxis("Horizontal");
         float inputY = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(speed* inputX,speed * inputY);
+        Vector3 movement = new Vector3(speed * inputX, speed * inputY);
         rb.velocity = movement;
+
+        //Esto es para saber para que lado van a salir los proyectiles double
         if (Input.GetKey(KeyCode.W))
         {
             lastKeyUp = true;
-        }else
+        }
+        else
         if (Input.GetKey(KeyCode.S))
         {
             lastKeyUp = false;
@@ -232,7 +244,8 @@ public class Controller_Player : MonoBehaviour
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy")|| collision.gameObject.CompareTag("EnemyProjectile"))
+        //Si entran en colisión con un enemigo o proyectil y dependiendo de si el escudo esta activo o no se destruye el objeto o se desactiva al jugador
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyProjectile"))
         {
             if (forceField)
             {
@@ -247,6 +260,7 @@ public class Controller_Player : MonoBehaviour
             }
         }
 
+        //Si entra en colisión con un power up sube el contador powerUpCount
         if (collision.gameObject.CompareTag("PowerUp"))
         {
             Destroy(collision.gameObject);

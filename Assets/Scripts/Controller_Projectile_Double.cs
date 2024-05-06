@@ -8,6 +8,7 @@ public class Controller_Projectile_Double : Controller_Projectile
 
     public override void ProjectileDirection()
     {
+        //Dependiendo de directionUp define la rotación del proyectil, para que salga mirando en diagonal para arriba o para abajo
             if (directionUp)
             {
                 rb.velocity = new Vector3(1 * projectileSpeed, 1 * projectileSpeed, 0);

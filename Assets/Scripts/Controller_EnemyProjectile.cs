@@ -14,6 +14,7 @@ public class Controller_EnemyProjectile : Projectile
 
     void Start()
     {
+        //Cuando el proyectil enemigo es creado si existe el jugador toma la posición de este en ese momento
         if (Controller_Player._Player != null)
         {
             player = Controller_Player._Player.gameObject;
@@ -25,6 +26,7 @@ public class Controller_EnemyProjectile : Projectile
     
     public override void Update()
     {
+        //Hace que el proyectil se mueva hacia la dirección que tomaron antes en referencia al jugador
         rb.AddForce(direction*enemyProjectileSpeed);
         base.Update();
     }

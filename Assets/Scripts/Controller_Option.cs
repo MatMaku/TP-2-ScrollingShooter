@@ -18,7 +18,7 @@ public class Controller_Option : MonoBehaviour
 
     void Start()
     {
-        
+        //Le agrego la corutina de Shoot a OnShooting y defino como pariente al jugador para tomar su posición inicial para luego crear los option con eso como referencia
         Controller_Player._Player.OnShooting += Shoot;
         parent = Controller_Player._Player;
         offset = new Vector3(parent.transform.position.x - this.transform.position.x, parent.transform.position.y - this.transform.position.y, parent.transform.position.z - this.transform.position.z);
@@ -36,6 +36,8 @@ public class Controller_Option : MonoBehaviour
     private void Update()
     {
         missileCount -= Time.deltaTime;
+
+        //Si destruyen al pariente este tambien es destruido
         if (parent == null)
             Destroy(this.gameObject);
 
@@ -58,6 +60,7 @@ public class Controller_Option : MonoBehaviour
 
     public void Shoot()
     {
+        //Dispara de la misma manera que hace el jugador
         if (parent.laserOn)
         {
             laser = Instantiate(parent.laserProjectile, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);

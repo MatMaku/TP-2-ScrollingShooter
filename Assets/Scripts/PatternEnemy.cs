@@ -19,6 +19,7 @@ public class PatternEnemy : Controller_Enemy
 
     override public void Update()
     {
+        //Cuando el timer llega a 0 invierto los estados de forward y goingUp
         timer -= Time.deltaTime;
         if (timer < 0)
         {
@@ -39,6 +40,7 @@ public class PatternEnemy : Controller_Enemy
 
     void FixedUpdate()
     {
+        //Dependiendo de forward y goingUp hago que se mueva en sus respectivas direcciones
         if (forward)
         {
             rb.AddForce(new Vector3(-1, 0, 0) * enemySpeed,ForceMode.Impulse);

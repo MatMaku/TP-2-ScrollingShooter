@@ -12,6 +12,7 @@ public class FollowingEnemy : Controller_Enemy
 
     void Start()
     {
+        //Defino player como el jugador, para despues poder tomar su posición
         if (Controller_Player._Player != null)
         {
             player = Controller_Player._Player.gameObject;
@@ -25,6 +26,7 @@ public class FollowingEnemy : Controller_Enemy
 
     public override void Update()
     {
+        //Si el jugador existe tomo su posición en direction
         if (player != null)
         {
             direction = -(this.transform.localPosition - player.transform.localPosition).normalized;
@@ -34,6 +36,7 @@ public class FollowingEnemy : Controller_Enemy
 
     void FixedUpdate()
     {
+        //Le agrego fuerza al enemigo en dirección a la posición que tomamos antes
         if (player != null)
             rb.AddForce(direction * enemySpeed);
     }
