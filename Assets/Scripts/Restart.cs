@@ -23,6 +23,7 @@ public class Restart : MonoBehaviour
             Controller_Player._Player.missiles = false;
             Controller_Player._Player.forceField = false;
             Controller_Player._Player.laserOn = false;
+            Controller_Player._Player.invencibility = false;
             Controller_Player._Player.options.Clear();
             Time.timeScale = 1;
             SceneManager.LoadScene(0);

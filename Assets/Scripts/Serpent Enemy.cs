@@ -16,6 +16,7 @@ public class SerpentEnemy : Controller_Enemy
 
     override public void Update()
     {
+        //Va hacia arriba y hacia abajo constantemente
         if (goingUp)
         {
             rb.AddForce(new Vector3(-1, 10, 0) * enemySpeed);

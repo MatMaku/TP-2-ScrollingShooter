@@ -22,6 +22,7 @@ public class Controller_Player : MonoBehaviour
     internal float shootingCount = 0.25f;
     internal bool forceField;
     internal bool laserOn;
+    internal bool invencibility;
 
     public static bool lastKeyUp;
 
@@ -67,6 +68,7 @@ public class Controller_Player : MonoBehaviour
         missiles = false;
         laserOn = false;
         forceField = false;
+        invencibility = false;
         options = new List<Controller_Option>();
     }
 
@@ -78,14 +80,17 @@ public class Controller_Player : MonoBehaviour
 
     private void CheckForceField()
     {
-        //Segun el estado del escudo pone de un color u otro al jugador para indicar su estado
-        if (forceField)
-        {
-            render.material.color = Color.blue;
-        }
-        else
-        {
-            render.material.color = Color.red;
+        if (invencibility == false) 
+        { 
+            //Segun el estado del escudo pone de un color u otro al jugador para indicar su estado
+            if (forceField)
+            {
+                render.material.color = Color.blue;
+            }
+            else
+            {
+                render.material.color = Color.red;
+            }
         }
     }
 
@@ -184,12 +189,32 @@ public class Controller_Player : MonoBehaviour
             {
                 OptionListing();
             }
-            else if (powerUpCount >= 6)
+            else if (powerUpCount == 6)
             {
                 forceField = true;
                 powerUpCount = 0;
             }
+            else if (powerUpCount >= 7)
+            {
+                invencibility = true;
+                InvencibilityCD();
+                powerUpCount = 0;
+            }
         }
+    }
+
+    private void InvencibilityCD()
+    {
+        render.material.color = Color.yellow;
+
+        StartCoroutine("Change");
+    }
+
+    IEnumerator Change()
+    {
+        yield return new WaitForSeconds(10);
+        render.material.color = Color.red;
+        invencibility = false;
     }
 
     private void OptionListing()
@@ -247,16 +272,24 @@ public class Controller_Player : MonoBehaviour
         //Si entran en colisión con un enemigo o proyectil y dependiendo de si el escudo esta activo o no se destruye el objeto o se desactiva al jugador
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("EnemyProjectile"))
         {
-            if (forceField)
+            if (invencibility)
             {
                 Destroy(collision.gameObject);
-                forceField = false;
+                Controller_Hud.points++;
             }
-            else
-            {
-                gameObject.SetActive(false);
-                //Destroy(this.gameObject);
-                Controller_Hud.gameOver = true;
+            else 
+            { 
+                if (forceField)
+                {
+                    Destroy(collision.gameObject);
+                    forceField = false;
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                    //Destroy(this.gameObject);
+                    Controller_Hud.gameOver = true;
+                }
             }
         }
 

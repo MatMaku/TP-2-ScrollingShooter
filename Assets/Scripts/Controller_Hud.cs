@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,14 +12,19 @@ public class Controller_Hud : MonoBehaviour
 
     public static int points;
 
+    public static float invencibilityTime;
+
     public Text pointsText;
 
     public Text powerUpText;
+
+    public Text invencibilityText;
 
     private Controller_Player player;
 
     void Start()
     {
+        invencibilityTime = 10;
         gameOver = false;
         gameOverText.gameObject.SetActive(false);
         points = 0;
@@ -27,6 +33,17 @@ public class Controller_Hud : MonoBehaviour
 
     void Update()
     {
+        if (player.invencibility)
+        {
+            invencibilityTime -= Time.deltaTime;
+            invencibilityText.text = "Invencibility: " + Math.Round(invencibilityTime, 0).ToString();
+        }
+        else
+        {
+            invencibilityText.text = "";
+            invencibilityTime = 10;
+        }
+
         //Si el gameOver es true significa que el jugador perdio y se activa el texto de game over en la pantalla
         if (gameOver)
         {
@@ -61,9 +78,13 @@ public class Controller_Hud : MonoBehaviour
             {
                 powerUpText.text = "PowerUp: Option";
             }
-            else if (player.powerUpCount >= 6)
+            else if (player.powerUpCount == 6)
             {
                 powerUpText.text = "PowerUp: Shield";
+            }
+            else if (player.powerUpCount >= 7)
+            {
+                powerUpText.text = "PowerUp: Invencibility";
             }
         }
         pointsText.text = "Score: " + points.ToString();
